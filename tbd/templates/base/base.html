@@ -1,0 +1,52 @@
+{% load static %}
+<html>
+   <head>
+      <link rel="stylesheet" href="{% static 'vendors/bootstrap4/css/bootstrap.min.css' %}">
+       <link rel="stylesheet" href="{% static 'vendors/tether-1.3.3/dist/css/tether.min.css' %}">
+       <link rel="stylesheet" href="{% static 'vendors/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+       <link rel="stylesheet" href="{% static 'resources/style.css' %}">
+       <script src="{% static 'vendors/jquery/jquery-3.2.1.min.js'%}"></script>
+       <script src="{% static 'vendors/tether-1.3.3/dist/js/tether.min.js'  %}"> </script>
+      <script src="{% static 'vendors/bootstrap4/js/bootstrap.min.js'  %}"> </script>
+
+   </head>
+   <body>
+      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Proyecto TDB</a>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'equipment_rental:index' %}">Inicio<span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{%  url 'equipment_rental:list_equipments' %}">Equipamiento</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{%  url 'equipment_rental:list_clients' %}">Clientes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%  url 'equipment_rental:view_leasing' %}">Préstamos</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{%  url 'admin:index' %}">Administrador</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+      {% block content %}
+      {% endblock %}
+
+      {% block scripts %}
+      {% endblock %}
+   </body>
+
+</html>
