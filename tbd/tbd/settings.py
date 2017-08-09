@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Application definition
 
@@ -37,12 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-INSTALLED_APPS += [
     'equipment_rental',
-    'crispy_forms'
+    'crispy_forms',
+    'leaflet',
+
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tbd',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '0918',
     }
 }
 
