@@ -6,7 +6,7 @@ from .models import Equipment
 from .forms import EquipmentForm
 from .models import Client,Leasing,LeasingEquipments
 from .forms import ClientForm
-
+from .models import Site3, Tipo, Tipo_publicaciones, Provincia_biotica, Provincia, Rasgos, Ad_cultural, Periodo, Publicaciones, Localidad
 
 # Create your views here.
 def index(request):
@@ -109,3 +109,22 @@ def delete_leasing(request,leasing_pk=None):
 
     leasing = Leasing.objects.all()
     return render(request,'equipment_rental/leasings/view_leasing.html',{'leasings': leasing} )
+
+def map(request):
+    site = Site3.objects.all()
+    tipo = Tipo.objects.all()
+    provincia = Provincia.objects.all()
+    prov_bio = Provincia_biotica.objects.all()
+    tipo_pub = Tipo_publicaciones.objects.all()
+    rasgo_cul = Rasgos.objects.all()
+    ad_cultural = Ad_cultural.objects.all()
+    periodo = Periodo.objects.all()
+    pub = Publicaciones.objects.all()
+    localidad = Localidad.objects.all()
+    if request.method =='GET':
+        f_prov = request.GET.get('check_prov')
+        f_provbio = request.GET.get('check_provbio')
+    else:
+        f_prov = "";
+        f_provbio = "";
+    return render(request, 'sites/mapping/map.html', {'fs_prov':f_prov,'fs_provbio':f_provbio,'pubs':pub,'locs':localidad,'sites':site,'tipos':tipo,'provincias':provincia,'provs_bio':prov_bio,'tipos_pub':tipo_pub,'rasgos':rasgo_cul,'ads_cultural':ad_cultural,'periodos':periodo})

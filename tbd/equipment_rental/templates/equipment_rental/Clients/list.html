@@ -1,0 +1,29 @@
+{%  extends 'base/base.html' %}
+{% block content %}
+    <div class="container margin10">
+        <br>
+        <div class="row">
+           <a class="btn btn-primary" href="{% url 'equipment_rental:new_client' %}"> <span class="fa fa-plus" aria-hidden="true"></span> Nuevo </a>
+        </div>
+        <br>
+        <table class="table table-hover">
+        <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+        {% for clients in  clients %}
+            <tr>
+            <td> {{clients.name }}</td>
+            <td>
+                <a href="{% url 'equipment_rental:edit_client' clients.pk %}"> <span class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></span> </a>
+                &nbsp;&nbsp;
+                <a href="{% url 'equipment_rental:delete_client' clients.pk %}" onclick="return confirm('Desea borrar el registro?')"> <span class="fa fa-lg fa-trash" aria-hidden="true"></span> </a>
+
+
+            </td>
+
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{%  endblock %}

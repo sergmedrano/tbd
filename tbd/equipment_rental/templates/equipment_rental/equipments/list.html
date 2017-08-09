@@ -1,0 +1,37 @@
+{%  extends 'base/base.html' %}
+{% block content %}
+    <div class="container margin10">
+        <br>
+        <div class="row">
+           <a class="btn btn-primary" href="{% url 'equipment_rental:new_equipment' %}"> <span class="fa fa-plus" aria-hidden="true"></span> Nuevo </a>
+        </div>
+        <br>
+        <table class="table table-hover">
+        <tr>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Descripcion</th>
+            <th>Precio diario</th>
+            <th> Stock dis/Total </th>
+            <th> Acciones </th>
+        </tr>
+        {% for equipment in  equipments %}
+            <tr>
+            <td> {{equipment.name}}</td>
+            <td> {{equipment.branch }}</td>
+            <td> {{equipment.model }}</td>
+            <td> {{equipment.description }}</td>
+            <td> {{equipment.daily_lease_price }}</td>
+            <td> {{equipment.stock_available}} / {{equipment.stock}}</td>
+            <td>
+                <a href="{% url 'equipment_rental:edit_equipment' equipment.pk %}"> <span class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></span> </a>
+               &nbsp; &nbsp;
+                <a href="{% url 'equipment_rental:delete_equipment' equipment.pk %}" onclick="return confirm('Desea borrar el registro?')"> <span class="fa fa-lg fa-trash" aria-hidden="true"></span> </a>
+            </td>
+
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{%  endblock %}

@@ -1,0 +1,184 @@
+{%  extends 'base/base.html' %}
+{%  load crispy_forms_tags %}
+{%  load leaflet_tags %}
+{% block content %}
+    <head>
+        <title>Mapa por categorias de sitios</title>
+        {% leaflet_js %}
+        {% leaflet_css %}
+        <style>
+            #map{
+                width: 800px;
+                height: 500px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 10px">
+                <h3 align="center">Mapa por categorias de sitios</h3>
+                <?php echo $filtro_provbio; ?>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="margin-left: 15px">
+                <div class="panel panel-group">
+                    <form action="map.html" method="get">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse1">Provincia biótica</a>
+                                </h6>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <table style="width: 175px">
+                                    {% for prov_bio in provs_bio %}
+                                        <tr style="font-size: 12px">
+                                            <td>
+                                                <span class="list-group-item">{{ prov_bio.nombre }}</span>
+                                            </td>
+                                            <td style="margin-left: 5px">
+                                                <input type="checkbox" name="check_provbio" value="{{ prov_bio.nombre }}">
+                                            </td>
+                                         </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse2">Tipo</a>
+                                </h6>
+                            </div>
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <table style="width: 175px">
+                                    {% for tipo in tipos %}
+                                        <tr style="font-size: 12px">
+                                            <td>
+                                                <span class="list-group-item">{{ tipo.nombre }}</span>
+                                            </td>
+                                            <td style="margin-left: 5px">
+                                                <input type="checkbox" name="check_tipo" value="{{ tipo.nombre }}">
+                                            </td>
+                                         </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse3">Rasgos culturales</a>
+                                </h6>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <table style="width: 175px">
+                                    {% for rasgo in rasgos %}
+                                        <tr style="font-size: 12px">
+                                            <td>
+                                                <span class="list-group-item">{{ rasgo.nombre }}</span>
+                                            </td>
+                                            <td style="margin-left: 5px">
+                                                <input type="checkbox" name="check_rasgo" value="{{ rasgo.nombre }}">
+                                            </td>
+                                         </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse4">Publicación</a>
+                                </h6>
+                            </div>
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <table style="width: 175px">
+                                    {% for t_pub in tipos_pub %}
+                                        <tr style="font-size: 12px">
+                                            <td>
+                                                <span class="list-group-item">{{ t_pub.tipo }}</span>
+                                            </td>
+                                            <td style="margin-left: 5px">
+                                                <input type="checkbox" name="check_tpub" value="{{ t_pub.tipo }}">
+                                            </td>
+                                         </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="panel-heading">
+                                <h6 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse5">Periodo</a>
+                                </h6>
+                            </div>
+                            <div id="collapse5" class="panel-collapse collapse">
+                                <table style="width: 175px">
+                                    {% for per in periodos %}
+                                        <tr style="font-size: 12px">
+                                            <td>
+                                                <span class="list-group-item">{{ per.periodo }}</span>
+                                            </td>
+                                            <td style="margin-left: 5px">
+                                                <input type="checkbox" name="check_periodo" value="{{ per.periodo }}">
+                                            </td>
+                                         </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-9">
+                {% leaflet_map "map" callback="window.map_init" %}
+            </div>
+        </div>
+    </body>
+{%  endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript">
+        function get_filtro_provbio() {
+            var filtro_provbio = "";
+            {% for f_provbio in fs_provbio %}
+                filtro_provbio = filtro_provbio.concat("{{ f_provbio }}");
+            {% endfor %}
+            return filtro_provbio;
+        }
+    </script>
+
+    <script type="text/javascript">
+        function map_init(map) {
+            var lat_sum = 0;
+            var long_sum = 0;
+            var i = 0;
+            {% for site in sites %}
+                var lat = grd2dec('{{ site.latitud }}');
+                var long = grd2dec('{{ site.longitud }}');
+                var pb_site = '{{ site.prov_bio_id }}';
+                if(pb_site == get_filtro_provbio() || get_filtro_provbio() == "") {
+                    lat_sum = Number(lat_sum) + Number(lat);
+                    long_sum = Number(long_sum) + Number(long);
+                    i = Number(i) + 1;
+                    L.marker([lat, long]).addTo(map).bindPopup('Sitio: {{ site.name }} <br> Provincia biótica: '+pb_site+' <br> Latitud:' + lat + ' <br> Longitud:' + long);
+                }
+            {% endfor %}
+            var lat_prom = lat_sum/i;
+            var long_prom = long_sum/i;
+            map.setView([lat_prom,long_prom],6);
+        };
+    </script>
+    
+    <script type="text/javascript">
+        function grd2dec(coord){
+            var grados = coord.slice(0,2);
+            var min = coord.slice(3,5);
+            var seg = coord.substr(6);
+            seg = seg.substr(4);
+            seg = seg.substr(0,2);
+            var coord_dec = String(-(Number(grados)+(Number(min)/60)+(Number(seg)/3600)));
+            return coord_dec;
+        }
+    </script>
+{% endblock %}

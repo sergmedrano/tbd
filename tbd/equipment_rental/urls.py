@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^leasings/new/$', views.new_leasing, name='new_leasing'),
     url(r'^leasings/list/$', views.view_leasing, name='view_leasing'),
     url(r'^leasings/delete/(?P<leasing_pk>[\d-]+)$', views.delete_leasing, name='delete_leasing'),
-
+    url(r'^mapping/map.html$', views.map, name='map')
 ]
